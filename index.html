@@ -78,6 +78,21 @@
 
     <!-- JavaScript 邏輯 -->
     <script>
+        // 一鍵全開（偷看答案）的解鎖函式
+function revealAll() {
+  if (typeof backMusclesData !== 'undefined') {
+    backMusclesData.forEach(item => {
+      item.unlocked = true;
+    });
+  }
+  
+  // 如果有更新畫面的函式就呼叫它，否則直接重新整理網頁
+  if (typeof updateUI === 'function') {
+    updateUI();
+  } else {
+    location.reload();
+  }
+}
         // 背部肌肉完整資料庫（24項，含層次、中文、提示與圖片路徑）
         const backMusclesData = [
             // 1. 淺層
