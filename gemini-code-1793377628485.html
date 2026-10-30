@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>解剖學互動背單字系統 - 背部肌肉</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700&display=swap');
+        body {
+            font-family: 'Noto Sans TC', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen flex flex-col">
+
+    <!-- 頂部導覽列 -->
+    <header class="bg-slate-800 border-b border-slate-700 py-4 px-6 shadow-md sticky top-0 z-50">
+        <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            <div>
+                <h1 class="text-2xl font-bold bg-gradient-to-r from-blue-400 to-teal-400 bg-clip-text text-transparent">
+                    Anatomy Mastery 
+                </h1>
+                <p class="text-xs text-slate-400">解剖學互動背單字系統（背部肌肉專用）</p>
+            </div>
+            
+            <!-- 分類篩選列 -->
+            <div class="flex flex-wrap gap-2 text-sm">
+                <button onclick="filterCategory('all')" id="btn-all" class="px-3 py-1.5 rounded-lg bg-blue-600 font-medium transition shadow">全部顯示</button>
+                <button onclick="filterCategory('muscle')" id="btn-muscle" class="px-3 py-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 transition">肌肉</button>
+                <button onclick="filterCategory('vessel')" id="btn-vessel" class="px-3 py-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 transition">血管 (建置中)</button>
+                <button onclick="filterCategory('nerve')" id="btn-nerve" class="px-3 py-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 transition">神經 (建置中)</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主要內容區 -->
+    <main class="flex-grow max-w-6xl mx-auto w-full p-4 md:p-6 space-y-8">
+
+        <!-- 區域導覽列 -->
+        <section class="bg-slate-800/60 border border-slate-700/80 rounded-2xl p-4 shadow-sm">
+            <h2 class="text-sm font-semibold text-slate-400 mb-3 tracking-wider uppercase">選擇身體區域</h2>
+            <div class="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-8 gap-2">
+                <button onclick="selectRegion('back')" id="reg-back" class="p-2.5 rounded-xl text-center text-sm font-medium bg-blue-600 text-white shadow transition">背部</button>
+                <button onclick="selectRegion('upper')" id="reg-upper" class="p-2.5 rounded-xl text-center text-sm font-medium bg-slate-700/50 text-slate-400 hover:bg-slate-700 hover:text-slate-200 transition">上肢</button>
+                <button onclick="selectRegion('lower')" id="reg-lower" class="p-2.5 rounded-xl text-center text-sm font-medium bg-slate-700/50 text-slate-400 hover:bg-slate-700 hover:text-slate-200 transition">下肢</button>
+                <button onclick="selectRegion('chest')" id="reg-chest" class="p-2.5 rounded-xl text-center text-sm font-medium bg-slate-700/50 text-slate-400 hover:bg-slate-700 hover:text-slate-200 transition">胸部</button>
+                <button onclick="selectRegion('abdomen')" id="reg-abdomen" class="p-2.5 rounded-xl text-center text-sm font-medium bg-slate-700/50 text-slate-400 hover:bg-slate-700 hover:text-slate-200 transition">腹部</button>
+                <button onclick="selectRegion('neck')" id="reg-neck" class="p-2.5 rounded-xl text-center text-sm font-medium bg-slate-700/50 text-slate-400 hover:bg-slate-700 hover:text-slate-200 transition">頸部</button>
+                <button onclick="selectRegion('head')" id="reg-head" class="p-2.5 rounded-xl text-center text-sm font-medium bg-slate-700/50 text-slate-400 hover:bg-slate-700 hover:text-slate-200 transition">頭部</button>
+                <button onclick="selectRegion('pelvis')" id="reg-pelvis" class="p-2.5 rounded-xl text-center text-sm font-medium bg-slate-700/50 text-slate-400 hover:bg-slate-700 hover:text-slate-200 transition">骨盆會陰</button>
+            </div>
+        </section>
+
+        <!-- 狀態與進度控制 -->
+        <section class="flex flex-col sm:flex-row justify-between items-center bg-slate-800/40 p-4 rounded-xl border border-slate-700/50 gap-4">
+            <div class="flex items-center gap-3">
+                <span id="region-title-badge" class="px-3 py-1 rounded-full bg-blue-500/20 text-blue-400 font-semibold text-sm border border-blue-500/30">背部肌肉</span>
+                <span id="progress-text" class="text-sm text-slate-400">已解鎖 0 / 24 項構造</span>
+            </div>
+            <div class="flex gap-2 w-full sm:w-auto">
+                <button onclick="revealAll()" class="flex-1 sm:flex-none px-4 py-2 bg-slate-700 hover:bg-slate-600 text-slate-200 text-sm font-medium rounded-lg transition">一鍵全開（偷看答案）</button>
+                <button onclick="resetAll()" class="flex-1 sm:flex-none px-4 py-2 bg-rose-950/50 hover:bg-rose-900/60 text-rose-300 border border-rose-800/50 text-sm font-medium rounded-lg transition">全部重設</button>
+            </div>
+        </section>
+
+        <!-- 區塊容器：依照層次分組顯示 -->
+        <div id="layers-container" class="space-y-8">
+            <!-- 動態生成層次卡片 -->
+        </div>
+
+    </main>
+
+    <!-- 底部版權 -->
+    <footer class="text-center py-6 text-xs text-slate-500 border-t border-slate-800 mt-12">
+        Anatomy Mastery Learning System &copy; 2026
+    </footer>
+
+    <!-- JavaScript 邏輯 -->
+    <script>
+        // 背部肌肉完整資料庫（24項，含層次、中文、提示與圖片路徑）
+        const backMusclesData = [
+            // 1. 淺層
+            { id: 1, name: "trapezius", cn: "斜方肌", layer: "淺層 (Superficial)", hint: "上背部大型三角形肌肉", img: "images/trapezius.jpg", unlocked: false },
+            { id: 2, name: "latissimus dorsi", cn: "闊背肌", layer: "淺層 (Superficial)", hint: "下背與側腰大型羽狀肌", img: "images/latissimus_dorsi.jpg", unlocked: false },
+            { id: 3, name: "levator scapulae", cn: "肩胛提肌", layer: "淺層 (Superficial)", hint: "位於頸側至肩胛骨上角", img: "images/levator_scapulae.jpg", unlocked: false },
+            { id: 4, name: "rhomboid minor", cn: "小菱形肌", layer: "淺層 (Superficial)", hint: "位於肩胛骨內側上方", img: "images/rhomboid_minor.jpg", unlocked: false },
+            { id: 5, name: "rhomboid major", cn: "大菱形肌", layer: "淺層 (Superficial)", hint: "位於小菱形肌下方", img: "images/rhomboid_major.jpg", unlocked: false },
+            
+            // 2. 中層
+            { id: 6, name: "serratus posterior superior", cn: "上後鋸肌", layer: "中層 (Intermediate)", hint: "輔助呼吸的背部中層肌肉", img: "images/serratus_posterior_superior.jpg", unlocked: false },
+            { id: 7, name: "serratus posterior inferior", cn: "下後鋸肌", layer: "中層 (Intermediate)", hint: "位於腰背交界處", img: "images/serratus_posterior_inferior.jpg", unlocked: false },
+            
+            // 3. 內在肌淺層
+            { id: 8, name: "splenius capitis", cn: "頭夾肌", layer: "內在肌淺層 (Intrinsic - Superficial)", hint: "頸後伸展與旋轉", img: "images/splenius_capitis.jpg", unlocked: false },
+            { id: 9, name: "splenius cervicis", cn: "頸夾肌", layer: "內在肌淺層 (Intrinsic - Superficial)", hint: "位於頭夾肌下方", img: "images/splenius_cervicis.jpg", unlocked: false },
+            
+            // 4. 內在肌中層
+            { id: 10, name: "iliocostalis", cn: "髂肋肌", layer: "內在肌中層 (Intrinsic - Intermediate)", hint: "豎脊肌最外側群", img: "images/iliocostalis.jpg", unlocked: false },
+            { id: 11, name: "longissimus", cn: "最長肌", layer: "內在肌中層 (Intrinsic - Intermediate)", hint: "豎脊肌中間群", img: "images/longissimus.jpg", unlocked: false },
+            { id: 12, name: "spinalis", cn: "棘肌", layer: "內在肌中層 (Intrinsic - Intermediate)", hint: "豎脊肌最內側群", img: "images/spinalis.jpg", unlocked: false },
+            
+            // 5. 內在肌深層
+            { id: 13, name: "semispinalis", cn: "半棘肌", layer: "內在肌深層 (Intrinsic - Deep)", hint: "跨越多個節段的背肌", img: "images/semispinalis.jpg", unlocked: false },
+            { id: 14, name: "multifidus", cn: "多裂肌", layer: "內在肌深層 (Intrinsic - Deep)", hint: "對脊椎穩定極重要", img: "images/multifidus.jpg", unlocked: false },
+            { id: 15, name: "rotatores", cn: "轉肌", layer: "內在肌深層 (Intrinsic - Deep)", hint: "最短的脊椎深層轉肌", img: "images
